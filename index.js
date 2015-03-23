@@ -16,7 +16,10 @@ Timestamp.prototype = {
 };
 
 function Result(esResult) {
-  this.hostname = esResult._source.hostname;
+  this.targetHostname = esResult._source.hostname;
+  this.validForHostname = esResult._source.redactedEE
+                        ? esResult._source.redactedEE.redactedCN
+                        : "(none)";
   this.intermediates = esResult._source.restOfCertChain
                        ? esResult._source.restOfCertChain
                        : [];
@@ -27,12 +30,19 @@ function Result(esResult) {
 }
 
 Result.prototype = {
-  hostname: null,
+  targetHostname: null,
+  validForHostname: null,
   intermediates: null,
   timestamps: null,
   count: 0,
 
   matches: function(otherResult) {
+    if (this.targetHostname != otherResult.targetHostname) {
+      return false;
+    }
+    if (this.validForHostname != otherResult.validForHostname) {
+      return false;
+    }
     for (var i in this.intermediates) {
       if (otherResult.intermediates.indexOf(this.intermediates[i]) == -1) {
         return false;
@@ -87,8 +97,10 @@ function displayResults(resultSet) {
   for (var i in resultSet.results) {
     var result = resultSet.results[i];
     var resultDOM = document.createElement("div");
-    var resultText = document.createTextNode(result.hostname + " (x" +
-                                             result.count + ")");
+    var resultText = document.createTextNode(result.targetHostname +
+                                             " (valid for " +
+                                             result.validForHostname +
+                                             ") (x" + result.count + ")");
     resultDOM.appendChild(resultText);
     var statsDOM = document.createElement("div");
     statsDOM.setAttribute("class", "resultInfo");
