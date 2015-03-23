@@ -1,0 +1,15 @@
+.resultInfo {
+  padding-left: 10px;
+}
+
+#certsplainerContainer {
+  position: absolute;
+  display: none;
+  background-color: white;
+}
+
+#certsplainerContainer.active {
+  display: block;
+  top: 0px;
+  left: 0px;
+}

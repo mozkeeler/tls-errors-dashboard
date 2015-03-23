@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TLS Error Reports</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+  Error code:<select id="errorCodes" onchange="getReports();"></select>
+  <div id="results"></div>
+  <div id="certsplainerContainer">
+    <iframe id="certsplainer" src="certsplainer/" width=600 height=800></iframe>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
